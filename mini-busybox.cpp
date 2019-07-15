@@ -5,7 +5,7 @@
 
 using namespace std;
 
-void PrintUsage(string msg)
+void PrintUsage(const string& msg)
 {
     cerr << "Usage: " << msg;
     exit(1);
@@ -13,13 +13,12 @@ void PrintUsage(string msg)
 
 // Prints all the files in the given directory. If no directory is provided,
 // defaults to the current directory.
-void Ls(string dir_path)
+void Ls(const string& dir_path)
 {
     DIR *dir;
     struct dirent *entry;
 
     if ((dir = opendir(dir_path.c_str())) != nullptr) {
-        // print all files and directories
         while ((entry = readdir(dir)) != nullptr) {
             // do not print hidden directories
             if (entry->d_name[0] != '.')
@@ -37,10 +36,12 @@ void Ls(string dir_path)
 }
 
 // Prints contents of a file to standard out
-void Cat(string file_name)
+void Cat(const string& file_name)
 {
 	ifstream infile(file_name);
     string line;
+
+    // TODO if file is directory, print error message
 
     // print each line of the file
     while (getline(infile, line)) {
@@ -50,6 +51,20 @@ void Cat(string file_name)
 	infile.close();
 }
 
+//
+void Grep(const string& file_name, const string& target)
+{
+    // open file
+    ifstream infile(file_name);
+    string line;
+
+    while (getline(infile, line)) {
+        if (line.find(target) != string::npos) {
+            // TODO highlight target words
+            cout << line << endl;
+        }
+    }
+}
 
 int main(int argc, char *argv[])
 {
@@ -58,6 +73,7 @@ int main(int argc, char *argv[])
 
     string cmd = argv[1];
 
+    // execute commands
     if (cmd == "ls") {
         string dir_path = "./";
 
@@ -70,8 +86,10 @@ int main(int argc, char *argv[])
             PrintUsage("cat <filename>\n");
 
         Cat(argv[2]);
-    } /* else if (cmd == "") {
+    }  else if (cmd == "grep") {
+        if (argc < 4)
+            PrintUsage("grep <filename> <target>\n");
 
+        Grep(argv[2], argv[3]);
     }
-    */
 }
