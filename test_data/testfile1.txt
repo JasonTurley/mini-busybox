@@ -1,0 +1,6 @@
+Hello,
+
+This is a simple file to test my mini-busybox
+program.
+
+Bye!
