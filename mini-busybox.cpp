@@ -51,15 +51,15 @@ void Cat(const string& file_name)
 	infile.close();
 }
 
-//
-void Grep(const string& file_name, const string& target)
+// Searches a file for all instances of a pattern
+void Grep(const string& pattern, const string& file_name)
 {
     // open file
     ifstream infile(file_name);
     string line;
 
     while (getline(infile, line)) {
-        if (line.find(target) != string::npos) {
+        if (line.find(pattern) != string::npos) {
             // TODO highlight target words
             cout << line << endl;
         }
@@ -88,7 +88,7 @@ int main(int argc, char *argv[])
         Cat(argv[2]);
     }  else if (cmd == "grep") {
         if (argc < 4)
-            PrintUsage("grep <filename> <target>\n");
+            PrintUsage("grep <pattern> <file>\n");
 
         Grep(argv[2], argv[3]);
     }
