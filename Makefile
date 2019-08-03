@@ -1,5 +1,5 @@
-EXE = mini-busybox
-OBJS = mini-busybox.o
+EXE = mini_busybox
+OBJS = mini_busybox.o
 
 CXX = g++
 CXX_FLAGS = -pedantic -Wall -Wextra -Werror -Wfatal-errors -Wno-unused-parameter -Wno-unused-variable

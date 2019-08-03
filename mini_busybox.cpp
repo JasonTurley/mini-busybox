@@ -22,7 +22,7 @@ void Ls(const string& dir_path)
         while ((entry = readdir(dir)) != nullptr) {
             // do not print hidden directories
             if (entry->d_name[0] != '.')
-                cout << entry->d_name << "\t";
+                cout << entry->d_name << "  ";
 
             // TODO differentiate between files and directories (i.e. color)
         }
@@ -30,8 +30,8 @@ void Ls(const string& dir_path)
         closedir(dir);
         cout << endl;
     } else {
-        perror("Could not open directory");
-        exit(1);
+        cerr << "ls: cannot access '" << dir_path.c_str()
+            << "': No such file or directory\n";
     }
 }
 
@@ -40,15 +40,20 @@ void Cat(const string& file_name)
 {
 	ifstream infile(file_name);
     string line;
+    size_t line_no;
 
     // TODO if file is directory, print error message
 
-    // print each line of the file
-    while (getline(infile, line)) {
-        cout << line << endl;
-    }
+    if (infile.is_open()) {
 
-	infile.close();
+        while (getline(infile, line)) {
+            cout << line << endl;
+        }
+
+	    infile.close();
+    } else {
+        cout << "cat: " << file_name << ": No such file or directory\n";
+    }
 }
 
 // Searches a file for all instances of a pattern
@@ -64,6 +69,8 @@ void Grep(const string& pattern, const string& file_name)
             cout << line << endl;
         }
     }
+
+    infile.close();
 }
 
 int main(int argc, char *argv[])
